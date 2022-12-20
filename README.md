@@ -2,7 +2,7 @@
 
 Log Analytics - Azure Activity Table - Resources
 
-The following can be used as a reference for the previous chapters
+The following can be used as a reference for quering into a Log Analytics workspace for AzureActivity Table
 
     // This shows the count of rows in the table. This depends on the time range you choose in Log Analytics
     AzureActivity
