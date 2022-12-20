@@ -87,3 +87,36 @@ The following can be used as a reference for quering into a Log Analytics worksp
     | extend r=todynamic(HTTPRequest)
     | project OperationNameValue,ResourceGroup,r["clientIpAddress"]
      
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Log Analytics - Exploring other Tables - Resources
+
+
+1. For the Sign-in logs table
+
+    SigninLogs 
+    | extend s=todynamic(Status) 
+    | where s["errorCode"]<>0
+
+2. For the Firewall logs in the Azure Diagnostics table
+
+
+    AzureDiagnostics 
+    | parse msg_s with Protocol 'request from ' *
+    | extend l_protocol=Protocol
+    | project l_protocol
+
+    AzureDiagnostics 
+    | parse msg_s with Protocol 'request from ' SourceIP ':' * 'to ' DestinationIP ':' *
+    | extend l_protocol=Protocol,l_sourceip=SourceIP,l_destination=DestinationIP
+    | project l_protocol,l_sourceip,l_destination
+
+3. For the Security Events table
+
+    SecurityEvent
+    | where EventID ==4673
+    | project Account
+
+    SecurityEvent
+    | summarize count() by bin(TimeGenerated, 1h)
+    | sort by TimeGenerated
